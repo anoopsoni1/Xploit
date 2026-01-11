@@ -17,26 +17,25 @@ export default function Home() {
   const trackRef = useRef(null);
 
   /* INTRO (X LOGO) */
-  useGSAP(
-    () => {
-      gsap
-        .timeline()
-        .to(".vi-mask-group", {
-          rotate: 10,
-          duration: 2,
-          ease: "power4.inOut",
-        })
-        .to(".vi-mask-group", {
-          scale: 10,
-          opacity: 0,
-          duration: 2,
-          delay: -1.8,
-          ease: "expo.inOut",
-          onComplete: () => setShowContent(true),
-        });
-    },
-    { scope: introRef }
-  );
+  useGSAP(() => {
+    const tl = gsap.timeline();
+
+    tl.to(".vi-mask-group", {
+      rotate: 10,
+      duration: 2.5,
+      ease: "power4.inOut",
+      transformOrigin: "50% 50%",
+    }).to(".vi-mask-group", {
+      scale: 10,
+      opacity: 0,
+      duration: 2.5,
+      delay: -1.8,
+      ease: "expo.inOut",
+      onComplete: () => {
+        setShowContent(true);
+      },
+    });
+  }, []);
 
   /* HORIZONTAL SCROLL */
   useGSAP(
@@ -62,12 +61,13 @@ export default function Home() {
 
   return (
     <>
+      {/* INTRO SCREEN */}
       {!showContent && (
         <div
           ref={introRef}
-          className="fixed inset-0 z-100 flex items-center justify-center bg-black"
+          className="svg fixed inset-0 z-100 flex items-center justify-center bg-black"
         >
-          <svg viewBox="0 0 800 600">
+          <svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice">
             <defs>
               <mask id="viMask">
                 <rect width="100%" height="100%" fill="black" />
@@ -79,16 +79,19 @@ export default function Home() {
                     textAnchor="middle"
                     dominantBaseline="middle"
                     fill="white"
+                    fontFamily="Arial Black"
                   >
                     X
                   </text>
                 </g>
               </mask>
             </defs>
+
             <image
               href="/Images/logo.png"
               width="100%"
               height="100%"
+              preserveAspectRatio="xMidYMid slice"
               mask="url(#viMask)"
             />
           </svg>
@@ -98,7 +101,6 @@ export default function Home() {
       {/* MAIN CONTENT */}
       {showContent && (
         <div className="relative min-h-screen bg-black text-white overflow-x-hidden">
-          
           {/* LIQUID BACKGROUND */}
           <div className="fixed inset-0 z-0 pointer-events-none">
             <LiquidEther
@@ -110,27 +112,27 @@ export default function Home() {
             />
           </div>
 
-          {/* PAGE CONTENT */}
           <main className="relative z-10">
             {/* NAV */}
-            <header className="px-10 py-6 flex justify-between items-center">
-              <div className="flex items-center gap-2 text-2xl font-bold">
+            <header className="sm:px-10 sm:py-6 px-2 py-2 text-center flex justify-between items-center">
+              <div className="flex items-center gap-2 text-2xl font-bold font-rajdhani">
                 <FaShield /> XPLOIT
               </div>
-              <nav className="flex gap-16 font-semibold">
+              <nav className="flex sm:gap-16 gap-5 font-rajdhani font-semibold">
                 <span>EVENTS</span>
                 <span>ABOUT</span>
-                <span>CONTACT</span>
+                <span className="sm:block hidden">CONTACT</span>
               </nav>
             </header>
 
             {/* HERO */}
             <section className="min-h-screen flex flex-col justify-center px-10 text-center">
-              <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold">
+              <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold font-rajdhani">
                 LEARN – <span className="text-amber-500">HACK</span>
                 <br />
                 SECURE – <span className="text-amber-500">DEFEND</span>
               </h1>
+
               <p className="mt-6 text-xl">
                 XPLOIT cybersecurity club of IIIT Bhopal
               </p>
