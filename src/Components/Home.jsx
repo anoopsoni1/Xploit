@@ -102,7 +102,7 @@ export default function Home() {
       {showContent && (
         <div className="relative min-h-screen bg-black text-white overflow-x-hidden">
           {/* LIQUID BACKGROUND */}
-          <div className="fixed inset-0 z-0 pointer-events-none">
+          <div className="fixed inset-0 z-0 pointer-events-auto">
             <LiquidEther
               colors={["#5227FF", "#FF9FFC", "#B19EEF"]}
               autoDemo
