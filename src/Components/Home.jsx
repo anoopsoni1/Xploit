@@ -1,11 +1,9 @@
-"use client";
-
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FaShield } from "react-icons/fa6";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import LiquidEther from "./GlitchText";
+import FuzzyText from "./GlitchText";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,8 +13,8 @@ export default function Home() {
   const introRef = useRef(null);
   const horizontalRef = useRef(null);
   const trackRef = useRef(null);
+  const videoRef = useRef(null);
 
-  /* INTRO (X LOGO) */
   useGSAP(() => {
     const tl = gsap.timeline();
 
@@ -37,7 +35,6 @@ export default function Home() {
     });
   }, []);
 
-  /* HORIZONTAL SCROLL */
   useGSAP(
     () => {
       if (!horizontalRef.current || !trackRef.current) return;
@@ -59,9 +56,16 @@ export default function Home() {
     { dependencies: [showContent] }
   );
 
+  useEffect(() => {
+    if (showContent && videoRef.current) {
+      videoRef.current.play().catch((error) => {
+        console.error("Error playing video:", error);
+      });
+    }
+  }, [showContent]);
+
   return (
     <>
-      {/* INTRO SCREEN */}
       {!showContent && (
         <div
           ref={introRef}
@@ -98,22 +102,25 @@ export default function Home() {
         </div>
       )}
 
-      {/* MAIN CONTENT */}
       {showContent && (
         <div className="relative min-h-screen bg-black text-white overflow-x-hidden">
-          {/* LIQUID BACKGROUND */}
-          <div className="fixed inset-0 z-0 pointer-events-auto">
-            <LiquidEther
-              colors={["#5227FF", "#FF9FFC", "#B19EEF"]}
-              autoDemo
-              autoSpeed={0.5}
-              autoIntensity={3}
-              resolution={0.5}
-            />
+          <div className="fixed inset-0 z-0 pointer-events-none">
+            <video
+              ref={videoRef}
+              muted
+              autoPlay
+              loop
+              playsInline
+              preload="auto"
+              className="w-full h-full object-cover"
+              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+            >
+              <source src="/Images/cy.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
           </div>
 
           <main className="relative z-10">
-            {/* NAV */}
             <header className="sm:px-10 sm:py-6 px-2 py-2 text-center flex justify-between items-center">
               <div className="flex items-center gap-2 text-2xl font-bold font-rajdhani">
                 <FaShield /> XPLOIT
@@ -125,14 +132,24 @@ export default function Home() {
               </nav>
             </header>
 
-            {/* HERO */}
             <section className="min-h-screen flex flex-col justify-center px-10 text-center">
               <h1 className="text-5xl sm:text-7xl lg:text-8xl font-bold font-rajdhani">
-                LEARN – <span className="text-amber-500">HACK</span>
-                <br />
-                SECURE – <span className="text-amber-500">DEFEND</span>
+                <FuzzyText 
+                  fontSize="clamp(2.5rem, 8vw, 6rem)"
+                  fontWeight={700}
+                  fontFamily="Rajdhani, sans-serif"
+                  color="#fff"
+                  baseIntensity={0.2}
+                  hoverIntensity={0.5}
+                  enableHover={true}
+                  fuzzRange={30}
+                  className="mx-auto"
+                >
+                  LEARN – HACK
+                  <br />
+                  SECURE – DEFEND
+                </FuzzyText>
               </h1>
-
               <p className="mt-6 text-xl">
                 XPLOIT cybersecurity club of IIIT Bhopal
               </p>
@@ -147,7 +164,6 @@ export default function Home() {
               </div>
             </section>
 
-            {/* HORIZONTAL EVENTS */}
             <section
               ref={horizontalRef}
               className="h-screen w-full overflow-hidden"
@@ -162,6 +178,7 @@ export default function Home() {
                       <h1 className="text-6xl text-cyan-400 font-bold">
                         {title}
                       </h1>
+                      
                       <p className="mt-4 text-gray-400">
                         INTER-IIIT EVENT
                       </p>
